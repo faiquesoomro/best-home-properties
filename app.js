@@ -13,12 +13,13 @@ function cardHTML(l) {
   const photo = l.photo
     ? '<img src="' + l.photo + '" alt="' + l.title + '" loading="lazy">'
     : '<div class="photo-fallback"><div class="big">' + l.beds + '</div><div class="sub">Photos on request via WhatsApp</div></div>';
+  const saleBadge = l.sale ? '<span class="sale-badge">For Sale</span>' : '';
   const feats = (l.features && l.features.length)
     ? '<ul class="feat">' + l.features.map(f => "<li>" + f + "</li>").join("") + "</ul>"
     : "";
   return (
     '<article class="card" data-beds="' + l.bedsFilter + '">' +
-      '<div class="card-photo"><span class="ref-badge">Ref: ' + l.code + "</span>" + photo + "</div>" +
+      '<div class="card-photo"><span class="ref-badge">Ref: ' + l.code + "</span>" + saleBadge + photo + "</div>" +
       '<div class="card-body">' +
         "<h3>" + l.title + "</h3>" +
         '<div class="meta"><span>' + l.beds + "</span><span>" + l.area + "</span></div>" +
