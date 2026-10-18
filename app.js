@@ -49,7 +49,25 @@ function render(filter) {
 function openModal(code) {
   const l = ALL.find(x => x.code === code);
   if (!l) return;
-  document.getElementById("modalPhoto").innerHTML = photoHTML(l);
+  const imgs = [l.photo].concat(l.gallery || []).filter(Boolean);
+  const photoBox = document.getElementById("modalPhoto");
+  photoBox.innerHTML = '<img id="modalMainImg" src="' + imgs[0] + '" alt="' + l.title + '">';
+  const thumbs = document.getElementById("modalThumbs");
+  if (imgs.length > 1) {
+    thumbs.style.display = "flex";
+    thumbs.innerHTML = imgs.map((src, i) =>
+      '<img src="' + src + '" class="' + (i === 0 ? "active" : "") + '" data-i="' + i + '" alt="Photo ' + (i + 1) + '" loading="lazy">'
+    ).join("");
+    thumbs.querySelectorAll("img").forEach(t =>
+      t.addEventListener("click", () => {
+        document.getElementById("modalMainImg").src = imgs[+t.dataset.i];
+        thumbs.querySelectorAll("img").forEach(x => x.classList.remove("active"));
+        t.classList.add("active");
+      }));
+  } else {
+    thumbs.style.display = "none";
+    thumbs.innerHTML = "";
+  }
   document.getElementById("modalRef").textContent = "Ref: " + l.code;
   document.getElementById("modalSale").style.display = l.sale ? "" : "none";
   document.getElementById("modalTitle").textContent = l.title;
