@@ -21,12 +21,14 @@ function cardHTML(l) {
     ? '<ul class="feat">' + l.features.slice(0, 3).map(f => "<li>" + f + "</li>").join("") + "</ul>"
     : "";
   const sale = l.sale ? '<span class="sale-badge">For Sale</span>' : "";
+  const price = l.price ? '<div class="price">' + l.price + "</div>" : "";
   return (
     '<article class="card reveal" data-code="' + l.code + '" data-beds="' + l.bedsFilter + '">' +
       '<div class="card-photo"><span class="ref-badge">Ref: ' + l.code + "</span>" + sale + photoHTML(l) + "</div>" +
       '<div class="card-body">' +
         "<h3>" + l.title + "</h3>" +
         '<div class="meta"><span>' + l.beds + "</span><span>" + l.area + "</span></div>" +
+        price +
         feats +
         '<div class="card-cta"><span class="view-link">View details →</span></div>' +
       "</div>" +
@@ -73,6 +75,9 @@ function openModal(code) {
   document.getElementById("modalTitle").textContent = l.title;
   document.getElementById("modalMeta").innerHTML =
     "<span>" + l.beds + "</span><span>" + l.area + "</span>";
+  const modalPrice = document.getElementById("modalPrice");
+  modalPrice.textContent = l.price || "";
+  modalPrice.style.display = l.price ? "" : "none";
   document.getElementById("modalFeat").innerHTML = (l.features && l.features.length)
     ? l.features.map(f => "<li>" + f + "</li>").join("")
     : "<li>Full details on request — just ask.</li>";
