@@ -9,6 +9,8 @@ function enquiryText(l) {
 }
 
 let ALL = [];
+let bedFilter = "all";
+let typeFilter = "all";
 
 function photoHTML(l, cls) {
   return l.photo
@@ -36,9 +38,11 @@ function cardHTML(l) {
   );
 }
 
-function render(filter) {
+function render() {
   const grid = document.getElementById("grid");
-  const shown = ALL.filter(l => filter === "all" || String(l.bedsFilter).toLowerCase() === filter);
+  const shown = ALL.filter(l =>
+    (bedFilter === "all" || String(l.bedsFilter).toLowerCase() === bedFilter) &&
+    (typeFilter === "all" || (typeFilter === "sale" ? !!l.sale : !l.sale)));
   grid.innerHTML = shown.length
     ? shown.map(cardHTML).join("")
     : '<p class="empty">No listings in this category right now — message us and we\'ll find one for you.</p>';
@@ -105,12 +109,21 @@ fetch("listings.json")
   .then(r => r.json())
   .then(listings => {
     ALL = listings;
-    render("all");
+    render();
     document.getElementById("filters").addEventListener("click", e => {
       if (e.target.classList.contains("chip")) {
-        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        document.getElementById("filters").querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
         e.target.classList.add("active");
-        render(e.target.dataset.filter);
+        bedFilter = e.target.dataset.filter;
+        render();
+      }
+    });
+    document.getElementById("typeFilters").addEventListener("click", e => {
+      if (e.target.classList.contains("chip")) {
+        document.getElementById("typeFilters").querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        e.target.classList.add("active");
+        typeFilter = e.target.dataset.type;
+        render();
       }
     });
   })
