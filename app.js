@@ -38,7 +38,7 @@ function cardHTML(l) {
 
 function render(filter) {
   const grid = document.getElementById("grid");
-  const shown = ALL.filter(l => filter === "all" || l.bedsFilter === filter);
+  const shown = ALL.filter(l => filter === "all" || String(l.bedsFilter).toLowerCase() === filter);
   grid.innerHTML = shown.length
     ? shown.map(cardHTML).join("")
     : '<p class="empty">No listings in this category right now — message us and we\'ll find one for you.</p>';
